@@ -61,7 +61,13 @@ void VectorList<T>::push_back(const T& value) {
 }
 
 template <class T>
-void VectorList<T>::pop_back() {}
+void VectorList<T>::pop_back() {
+  if (empty()){
+    throw std::out_of_range("A lista esta vazia");
+  }
+
+  _size--;
+}
 
 template <class T>
 void VectorList<T>::print() const {
@@ -72,7 +78,21 @@ void VectorList<T>::print() const {
 }
 
 template <class T>
-void VectorList<T>::insert(size_t index, const T& value) {}
+void VectorList<T>::insert(size_t index, const T& value) {
+  if(size() >= capacity()){
+    throw std::length_error("A lista esta cheia");
+  } else if (index > size()){
+    throw std::out_of_range("Indice invalido");
+  }
+
+  for(size_t i = size(); i > index; i--){
+    data[i] = data[i - 1];
+  }
+
+  data[index] = value;
+
+  _size++;
+}
 
 template <class T>
 void VectorList<T>::remove(size_t index) {

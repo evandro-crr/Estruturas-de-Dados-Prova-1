@@ -77,7 +77,24 @@ void DoublyLinkedList<T>::push_back(const T& value) {
 
 // O(1)  constante
 template <class T>
-void DoublyLinkedList<T>::pop_front() {}
+void DoublyLinkedList<T>::pop_front() {
+  if (empty()) {
+    throw std::out_of_range("Lista esta vazia");
+}
+
+auto tmp = head;
+head = head->next;
+
+if (head) {
+    head->prev = nullptr;
+} else {
+    tail = nullptr;
+}
+
+delete tmp;
+
+--_size;
+}
 
 // contante O( 1 )
 template <class T>
@@ -219,7 +236,59 @@ void DoublyLinkedList<T>::insert(iterator pos, const T& value) {
 }
 
 template <class T>
-void DoublyLinkedList<T>::erase(iterator first, iterator last) {}
+void DoublyLinkedList<T>::erase(iterator first, iterator last) {
+  if(first == last) {
+  return;
+} else if(first ==begin() and last ==end()) {
+  delete head;
+
+  head = nullptr;
+  tail = nullptr;
+
+  _size = 0;
+  return;
+} else if (first == begin()) {
+  auto num_elementos_removido = last - first;
+
+  auto last_node = last.node;
+  auto last_prev_node = (--last).node;
+
+  last_prev_node->next = nullptr;
+
+  delete first.node;
+
+  _size -= num_elementos_removido;
+
+  return;
+} else if (last ==end()) {
+  auto num_elementos_removido= last - first;
+
+  auto first_node = first.node;
+  auto first_prev_node = (--first).node;
+
+  first_prev_node->next = nullptr;
+
+  delete first_node;
+  _size -= num_elementos_removido;
+  
+  return;
+}else {
+  auto num_elementos_removido = last - first;
+
+  auto first_node = first.node;
+  auto first_prev_node = (--first).node;
+
+  auto last_node = last.node;
+  auto last_prev_node = (--last).node;
+
+  first_prev_node->next = last_node;
+  last_node->prev = first_prev_node;
+
+  last_prev_node->next = nullptr;
+  delete first_node;
+
+  _size -= num_elementos_removido;
+}}
 
 template <class T>
 template <class U>
